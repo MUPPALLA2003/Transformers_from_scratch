@@ -1,0 +1,25 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "transformers-from-scratch"
+version = "1.0.0"
+description = "Research-grade Transformer implementation from first principles in PyTorch"
+readme = "README.md"
+requires-python = ">=3.10,<3.11"
+license = { text = "MIT" }
+
+authors = [
+    { name = "Muppalla Komal", email = "muppallakomaliitkgp2022@gmail.com" }
+]
+
+dependencies = [
+    "torch>=2.1",
+    "numpy>=1.23",
+    "einops>=0.7",
+    "pyyaml>=6.0",
+    "tqdm>=4.66"
+]
+
+
