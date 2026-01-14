@@ -2,7 +2,7 @@ import torch
 import torch.nn as nn
 import LayerNormalization
 
-class ResidualLayer(nn.module):
+class ResidualLayer(nn.Module):
 
     def __init__(self,dropout:float):
         super().__init__()
