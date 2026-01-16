@@ -1,18 +1,18 @@
 import torch
 import torch.nn as nn
-import multiheadattention
-import FeedForward
-import Residual_network
+from multiheadattention import MultiHeadAttention
+from FeedForward import FeedForwardNN
+from Residual_network import ResidualLayer
 
 class EncoderLayer(nn.Module):
 
-    def __init__(self,self_attention_block:multiheadattention,feed_forward_block:FeedForward,dropout:float):
+    def __init__(self,self_attention_block:MultiHeadAttention,feed_forward_block:FeedForwardNN,dropout:float):
         super().__init__()
         self.self_attention_block = self_attention_block
         self.feed_forward_block = feed_forward_block
         self.residualnetwork = nn.ModuleList(
-            [Residual_network(dropout),
-            Residual_network(dropout)])
+            [ResidualLayer(dropout),
+            ResidualLayer(dropout)])
         
     def forward(self,x):
         x = self.residualnetwork[0](x,lambda x:self.self_attention_block(x,x,x))

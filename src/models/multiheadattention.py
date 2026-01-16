@@ -20,7 +20,7 @@ class MultiHeadAttention(nn.Module):
         return attention_scores @ value
     
     def forward(self,q,k,v):
-        B,C = q.shape
+        B,C,_ = q.shape
         query = self.Q_matrix(q)
         key = self.K_matrix(k)
         value = self.V_matrix(v)
