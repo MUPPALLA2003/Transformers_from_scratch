@@ -11,10 +11,9 @@ class EncoderLayer(nn.Module):
         self.self_attention_block = self_attention_block
         self.feed_forward_block = feed_forward_block
         self.residualnetwork = nn.ModuleList(
-            [ResidualLayer(dropout),
-            ResidualLayer(dropout)])
+            [ResidualLayer(dropout) for _ in range(2)])
         
-    def forward(self,x):
-        x = self.residualnetwork[0](x,lambda x:self.self_attention_block(x,x,x))
+    def forward(self,x,mask):
+        x = self.residualnetwork[0](x,lambda x:self.self_attention_block(x,x,x,mask))
         x = self.residualnetwork[1](x,self.feed_forward_block)
         return x   

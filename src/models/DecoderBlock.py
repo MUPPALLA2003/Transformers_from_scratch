@@ -7,7 +7,7 @@ from DecoderLayer import DecoderLayer
 from MultiHeadAttention import MultiHeadAttention
 from FeedForward import FeedForwardNN
 
-class DecoderBlock(nn.Module):
+class Decoder(nn.Module):
 
     def __init__(self,embedding: Embeddings,positional_enc: PositionalEncoding,dropout: float,num_layers: int,d_model: int,d_ff: int,h: int,d_k:int):
         super().__init__()
@@ -24,7 +24,7 @@ class DecoderBlock(nn.Module):
             for _ in range(num_layers)
         ])
 
-        self.norm = LayerNormalization()
+        self.norm = LayerNormalization(d_model)
 
     def forward(self, x, encoder_output, tgt_mask, src_pad_mask):
         x = self.embedding(x)

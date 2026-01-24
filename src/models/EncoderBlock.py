@@ -7,9 +7,9 @@ from PositionalEncoding import PositionalEncoding
 from MultiHeadAttention import MultiHeadAttention
 from FeedForward import FeedForwardNN
 
-class EncoderBlock(nn.Module):
+class Encoder(nn.Module):
 
-    def __init__(self,embedding:Embeddings,positional_enc:PositionalEncoding,norm:LayerNormalization,dropout:float,num_layers:int,d_model:int,d_ff:int,h:int,d_k:int):
+    def __init__(self,embedding:Embeddings,positional_enc:PositionalEncoding,dropout:float,num_layers:int,d_model:int,d_ff:int,h:int,d_k:int):
         super().__init__()
         self.embedding = embedding
         self.positional_enc = positional_enc
@@ -21,15 +21,16 @@ class EncoderBlock(nn.Module):
                 feed_forward_block=FeedForwardNN(d_model,d_ff,dropout),
                 dropout=dropout)
             for _ in range(num_layers)])
-        self.norm = norm
+        self.norm = LayerNormalization(d_model)
 
-    def forward(self,x):
+
+    def forward(self,x,mask):
         x = self.embedding(x)
         x = self.positional_enc(x)
         x = self.dropout(x)
         
         for layer in self.layers:
-            x = layer(x)
+            x = layer(x,mask)
         return self.norm(x)
 
              
