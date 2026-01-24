@@ -1,6 +1,6 @@
 import torch
 import torch.nn as nn
-from multiheadattention import MultiHeadAttention
+from MultiHeadAttention import MultiHeadAttention
 from FeedForward import FeedForwardNN
 from Residual_network import ResidualLayer
 

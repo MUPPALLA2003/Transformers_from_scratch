@@ -8,13 +8,14 @@ from Projection import ProjectionLayer
 from Transformer import Transformer
 from LayerNormalization import LayerNormalization
 
-def build_transformer(src_vocab_size:int,tgt_vocab_size:int,seq_len:int,d_model:int,N:int,h:int,dropout:float,d_ff:int):
+def build_transformer(src_vocab_size:int,tgt_vocab_size:int,seq_len:int,d_model:int,N:int,h:int,dropout:float,d_ff:int,d_k:int):
+
     src_embed = Embeddings(d_model,src_vocab_size)
     tgt_embed = Embeddings(d_model,tgt_vocab_size)
     pos = PositionalEncoding(d_model,seq_len,dropout)
     norm = LayerNormalization()
-    encoder = EncoderBlock(src_embed,pos,norm,dropout,N,d_model,d_ff,h)
-    decoder = DecoderBlock(tgt_embed,pos,dropout,N,d_model,d_ff,h)
+    encoder = EncoderBlock(src_embed,pos,norm,dropout,N,d_model,d_ff,h,d_k)
+    decoder = DecoderBlock(tgt_embed,pos,dropout,N,d_model,d_ff,h,d_k)
     projection = ProjectionLayer(d_model,tgt_vocab_size)
     transformer = Transformer(src_embed,tgt_embed,pos,encoder,decoder,projection)
 
