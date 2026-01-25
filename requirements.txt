@@ -1,5 +1,7 @@
+tokenizers>=0.15.0
 torch>=2.1
 numpy>=1.23
 einops>=0.7
 pyyaml>=6.0
 tqdm>=4.66
+datasets==2.16.1

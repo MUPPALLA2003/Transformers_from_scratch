@@ -19,7 +19,9 @@ dependencies = [
     "numpy>=1.23",
     "einops>=0.7",
     "pyyaml>=6.0",
-    "tqdm>=4.66"
+    "tqdm>=4.66",
+    "tokenizers>=0.15.0",
+    datasets==2.16.1,
 ]
 
 
