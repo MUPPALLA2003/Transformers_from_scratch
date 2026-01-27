@@ -26,30 +26,14 @@ class TranslationDataset(Dataset):
         dec_tokens = self.tokenizer_tgt.encode(tgt_text).ids
         enc_tokens = enc_tokens[: self.seq_len - 2]
         dec_tokens = dec_tokens[: self.seq_len - 1]
-        encoder_input = (
-            [self.sos_id]
-            + enc_tokens
-            + [self.eos_id]
-            + [self.pad_id] * (self.seq_len - len(enc_tokens) - 2)
-        )
-        decoder_input = (
-            [self.sos_id]
-            + dec_tokens
-            + [self.pad_id] * (self.seq_len - len(dec_tokens) - 1)
-        )
-        label = (
-            dec_tokens
-            + [self.eos_id]
-            + [self.pad_id] * (self.seq_len - len(dec_tokens) - 1)
-        )
+        encoder_input = ([self.sos_id] + enc_tokens + [self.eos_id] + [self.pad_id] * (self.seq_len - len(enc_tokens) - 2))
+        decoder_input = ([self.sos_id] + dec_tokens + [self.pad_id] * (self.seq_len - len(dec_tokens) - 1))
+        label = (dec_tokens + [self.eos_id] + [self.pad_id] * (self.seq_len - len(dec_tokens) - 1))
         encoder_input = torch.tensor(encoder_input, dtype=torch.long)
         decoder_input = torch.tensor(decoder_input, dtype=torch.long)
         label = torch.tensor(label, dtype=torch.long)
         encoder_mask = (encoder_input != self.pad_id).unsqueeze(0).unsqueeze(0)  
-        decoder_mask = (
-            (decoder_input != self.pad_id).unsqueeze(0).unsqueeze(0)
-            & causal_mask(self.seq_len)
-        )  
+        decoder_mask = ((decoder_input != self.pad_id).unsqueeze(0).unsqueeze(0) & causal_mask(self.seq_len))  
         return {
             "encoder_input": encoder_input,
             "decoder_input": decoder_input,
@@ -61,4 +45,4 @@ class TranslationDataset(Dataset):
         }
 
 def causal_mask(size):
-    return torch.tril(torch.ones((1, 1, size, size), dtype=torch.bool))
+    return torch.tril(torch.ones((1, 1, size, size)))
