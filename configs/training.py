@@ -17,7 +17,7 @@ def get_config():
         "dropout":0.1,
         "datasource": 'opus_books',
         "lang_src": "en",
-        "lang_tgt": "it",
+        "lang_tgt": "fr",
         "model_folder": "weights",
         "model_basename": "tmodel_",
         "preload": "latest",
