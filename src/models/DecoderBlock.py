@@ -26,10 +26,10 @@ class Decoder(nn.Module):
 
         self.norm = LayerNormalization(d_model)
 
-    def forward(self, x, encoder_output, tgt_mask, src_pad_mask):
+    def forward(self,x,encoder_output,mask,tgt_mask):
         x = self.embedding(x)
         x = self.positional_enc(x)
         x = self.dropout(x)
         for layer in self.layers:
-            x = layer(x, encoder_output, tgt_mask, src_pad_mask)
+            x = layer(x, encoder_output, mask, tgt_mask)
         return self.norm(x)

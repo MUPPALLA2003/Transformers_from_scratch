@@ -11,14 +11,14 @@ def build_transformer(src_vocab_size:int,tgt_vocab_size:int,seq_len:int,d_model:
 
     src_embed = Embeddings(d_model,src_vocab_size)
     tgt_embed = Embeddings(d_model,tgt_vocab_size)
-    pos = PositionalEncoding(d_model,seq_len,dropout)
-    encoder = Encoder(src_embed,pos,dropout,N,d_model,d_ff,h,d_k)
-    decoder = Decoder(tgt_embed,pos,dropout,N,d_model,d_ff,h,d_k)
+    src_pos = PositionalEncoding(d_model,seq_len,dropout)
+    tgt_pos = PositionalEncoding(d_model,seq_len,dropout)
+    encoder = Encoder(src_embed,src_pos,dropout,N,d_model,d_ff,h,d_k)
+    decoder = Decoder(tgt_embed,tgt_pos,dropout,N,d_model,d_ff,h,d_k)
     projection = ProjectionLayer(d_model,tgt_vocab_size)
-    transformer = Transformer(src_embed,tgt_embed,pos,encoder,decoder,projection)
+    transformer = Transformer(src_embed,tgt_embed,src_pos,tgt_pos,encoder,decoder,projection)
 
     for p in transformer.parameters():
         if p.dim()>1:
             nn.init.xavier_uniform_(p)
-
     return transformer        

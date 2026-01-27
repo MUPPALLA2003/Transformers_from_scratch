@@ -17,8 +17,8 @@ class DecoderLayer(nn.Module):
             ResidualLayer(dropout)]
             )
         
-    def forward(self,x,encoder_output,mask,pad_mask):
+    def forward(self,x,encoder_output,mask,tgt_mask):
         x = self.residual_network[0](x,lambda x:self.masked_self_attention_block(x,x,x,mask))    
-        x = self.residual_network[1](x,lambda x:self.cross_attention_block(x,encoder_output,encoder_output,pad_mask))
+        x = self.residual_network[1](x,lambda x:self.cross_attention_block(x,encoder_output,encoder_output,tgt_mask))
         x = self.residual_network[2](x,self.feed_forward_block)
         return x
