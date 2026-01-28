@@ -1,7 +1,7 @@
 import torch
 import os
 import torchmetrics
-from dataset import causal_mask
+from dataset.Dataset import causal_mask
 
 def greedy_decode(model, source, source_mask, tokenizer_tgt, max_len, device):
     sos_idx = tokenizer_tgt.token_to_id("[SOS]")

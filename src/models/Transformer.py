@@ -23,10 +23,10 @@ class Transformer(nn.Module):
         src = self.src_pos(src)
         return self.encoder(src,pad_mask)
 
-    def decode(self,tgt,encoder_output,mask,tgt_mask):
+    def decode(self,tgt, encoder_output,mask,tgt_mask):
         tgt = self.tgt_embed(tgt)
         tgt = self.tgt_pos(tgt)
-        return self.decode(tgt,encoder_output,mask,tgt_mask) 
+        return self.decoder(tgt,encoder_output,mask,tgt_mask) 
     
     def project(self,tgt):
         return self.projection_layer(tgt)

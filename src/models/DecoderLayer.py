@@ -6,15 +6,15 @@ from Residual_network import ResidualLayer
 
 class DecoderLayer(nn.Module):
 
-    def __init__(self,masked_self_attention_block:MultiHeadAttention,cross_attention_block:MultiHeadAttention,feed_forward_block:FeedForwardNN,dropout:float):
+    def __init__(self,masked_self_attention_block:MultiHeadAttention,cross_attention_block:MultiHeadAttention,feed_forward_block:FeedForwardNN,dropout:float,d_model:int):
         super().__init__()
         self.masked_self_attention_block = masked_self_attention_block
         self.cross_attention_block = cross_attention_block
         self.feed_forward_block = feed_forward_block
         self.residual_network = nn.ModuleList([
-            ResidualLayer(dropout),
-            ResidualLayer(dropout),
-            ResidualLayer(dropout)]
+            ResidualLayer(dropout,d_model),
+            ResidualLayer(dropout,d_model),
+            ResidualLayer(dropout,d_model)]
             )
         
     def forward(self,x,encoder_output,mask,tgt_mask):

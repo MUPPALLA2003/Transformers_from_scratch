@@ -3,7 +3,7 @@ import torch.nn as nn
 from src.models.model import build_transformer
 from tokenizer.Tokenizer import get_ds
 from validate.Validate import run_validation
-from configs.training import get_weights_file_path,latest_weights_file_path
+from configs.training import get_weights_file_path,latest_weights_file_path,get_config
 from torch.utils.data import Dataset, DataLoader, random_split
 from src.utils.checkpoints import save_checkpoint,load_checkpoint
 from torch.optim.lr_scheduler import LambdaLR
@@ -14,7 +14,7 @@ from datasets import load_dataset
 from torch.utils.tensorboard import SummaryWriter
 
 def get_model(config, vocab_src_len, vocab_tgt_len):
-    return build_transformer(vocab_src_len,vocab_tgt_len,config["seq_len"],config["seq_len"],d_model=config["d_model"])
+    return build_transformer(vocab_src_len,vocab_tgt_len,config["src_seq_len"],config["d_model"],config["N"],config["h"],config["dropout"],config["d_ff"],config["d_k"])
 
 def train_model(config):
     device = ("cuda" if torch.cuda.is_available() else "cpu")
@@ -50,7 +50,7 @@ def train_model(config):
             label = batch["label"].to(device)
             encoder_output = model.encode(encoder_input, encoder_mask)
             decoder_output = model.decode(encoder_output,encoder_mask,decoder_input,decoder_mask)
-            logits = model.project(decoder_output)
+            logits = model.projection(decoder_output)
             loss = loss_fn(logits.view(-1, logits.size(-1)),label.view(-1))
             optimizer.zero_grad(set_to_none=True)
             loss.backward()

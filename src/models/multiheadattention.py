@@ -10,22 +10,21 @@ class MultiHeadAttention(nn.Module):
         self.h = h
         self.d_k = d_model//h 
         self.dropout = nn.Dropout(dropout)
-        self.Q_matrix = nn.Linear(d_model,d_k,bias = False)
-        self.K_matrix = nn.Linear(d_model,d_k,bias = False)
-        self.V_matrix = nn.Linear(d_model,d_k,bias = False)
+        self.Q_matrix = nn.Linear(d_model,d_model,bias = False)
+        self.K_matrix = nn.Linear(d_model,d_model,bias = False)
+        self.V_matrix = nn.Linear(d_model,d_model,bias = False)
         self.O_matrix = nn.Linear(d_model,d_model,bias = False)
 
     @staticmethod
-    def attention(query,key,value,mask=None,dropout=None):
+    def attention(query, key, value, mask=None, dropout=None):
         d_k = query.size(-1)
         scores = (query @ key.transpose(-2, -1)) / math.sqrt(d_k)
         if mask is not None:
-            attention_scores = attention_scores.masked_fill_(mask,float('-inf'))
-        attention_scores = scores.softmax(dim=-1)
-
+            scores = scores.masked_fill((mask == 0).to(scores.device), float('-inf'))
+        attention_probs = scores.softmax(dim=-1)
         if dropout is not None:
-            attention_scores = dropout(attention_scores)    
-            return attention_scores @ value
+            attention_probs = dropout(attention_probs)
+        return attention_probs @ value
     
     def forward(self,q,k,v,mask):
         B,C,_ = q.shape

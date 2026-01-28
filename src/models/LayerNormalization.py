@@ -10,7 +10,8 @@ class LayerNormalization(nn.Module):
         self.gamma = nn.Parameter(torch.ones(d_model))
         self.beta = nn.Parameter(torch.zeros(d_model))
 
-    def forward(self,x):
-        mean = x.mean(dim=-1,keepdim=True)
-        std = x.var(dim=-1,keepdim=True)
-        return (self.gamma*(x-mean)/math.sqrt(std+self.eps)) + self.beta  
+    def forward(self, x):
+        mean = x.mean(dim=-1, keepdim=True)
+        var = x.var(dim=-1, keepdim=True, unbiased=False)
+        x_hat = (x - mean) / torch.sqrt(var + self.eps)
+        return self.gamma * x_hat + self.beta

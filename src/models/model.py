@@ -13,8 +13,8 @@ def build_transformer(src_vocab_size:int,tgt_vocab_size:int,seq_len:int,d_model:
     tgt_embed = Embeddings(d_model,tgt_vocab_size)
     src_pos = PositionalEncoding(d_model,seq_len,dropout)
     tgt_pos = PositionalEncoding(d_model,seq_len,dropout)
-    encoder = Encoder(src_embed,src_pos,dropout,N,d_model,d_ff,h,d_k)
-    decoder = Decoder(tgt_embed,tgt_pos,dropout,N,d_model,d_ff,h,d_k)
+    encoder = Encoder(dropout,N,d_model,d_ff,h,d_k)
+    decoder = Decoder(dropout,N,d_model,d_ff,h,d_k)
     projection = ProjectionLayer(d_model,tgt_vocab_size)
     transformer = Transformer(src_embed,tgt_embed,src_pos,tgt_pos,encoder,decoder,projection)
 
