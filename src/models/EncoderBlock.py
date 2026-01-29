@@ -23,8 +23,7 @@ class Encoder(nn.Module):
             for _ in range(self.num_layers)])
         self.norm = LayerNormalization(d_model)
 
-    def forward(self,x,mask):
-        x = self.dropout(x) 
+    def forward(self,x,mask): 
         for layer in self.layers:
             x = layer(x,mask)
         return self.norm(x)

@@ -27,7 +27,6 @@ class Decoder(nn.Module):
         self.norm = LayerNormalization(d_model)
 
     def forward(self,x,encoder_output,mask,tgt_mask):
-        x = self.dropout(x)
         for layer in self.layers:
             x = layer(x, encoder_output, mask, tgt_mask)
         return self.norm(x)
