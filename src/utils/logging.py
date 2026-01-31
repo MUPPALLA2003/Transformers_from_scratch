@@ -1,7 +1,6 @@
 import logging
 import os
 from datetime import datetime
-from typing import Optional
 
 def setup_logger(
     name: str,
@@ -18,7 +17,7 @@ def setup_logger(
 
     logger = logging.getLogger(name)
     logger.setLevel(level)
-    logger.propagate = False  # IMPORTANT
+    logger.propagate = False 
     formatter = logging.Formatter("[%(asctime)s] %(levelname)s %(name)s:%(lineno)d - %(message)s")
     file_handler = logging.FileHandler(log_file)
     file_handler.setFormatter(formatter)
