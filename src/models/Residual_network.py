@@ -10,5 +10,4 @@ class ResidualLayer(nn.Module):
         self.norm = LayerNormalization(d_model)
 
     def forward(self,x,sublayer):
-        return self.norm(x+self.dropout(sublayer(x)))    
-        
+        return x + self.dropout(sublayer(self.norm(x)))

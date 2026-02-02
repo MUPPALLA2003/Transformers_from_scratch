@@ -9,14 +9,14 @@ from FeedForward import FeedForwardNN
 
 class Decoder(nn.Module):
 
-    def __init__(self,dropout: float,num_layers: int,d_model: int,d_ff: int,h: int,d_k:int):
+    def __init__(self,dropout: float,num_layers: int,d_model: int,d_ff: int,h: int):
         super().__init__()
         self.dropout = nn.Dropout(dropout)
         self.num_layers = num_layers
         self.layers = nn.ModuleList([
             DecoderLayer(
-                masked_self_attention_block=MultiHeadAttention(d_model, h, dropout,d_k),
-                cross_attention_block=MultiHeadAttention(d_model, h, dropout,d_k),
+                masked_self_attention_block=MultiHeadAttention(d_model, h, dropout),
+                cross_attention_block=MultiHeadAttention(d_model, h, dropout),
                 feed_forward_block=FeedForwardNN(d_model, d_ff, dropout),
                 dropout=dropout,
                 d_model=d_model

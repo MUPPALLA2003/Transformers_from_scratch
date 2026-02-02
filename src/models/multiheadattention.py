@@ -4,7 +4,7 @@ import math
 
 class MultiHeadAttention(nn.Module):
 
-    def __init__(self,d_model:int,h:int,dropout:float,d_k:int):
+    def __init__(self,d_model:int,h:int,dropout:float):
         super().__init__()
         self.d_model = d_model
         self.h = h

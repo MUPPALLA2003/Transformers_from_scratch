@@ -11,7 +11,6 @@ def get_config():
         "src_seq_len":500,
         "tgt_seq_len":500,
         "d_model": 512,
-        "d_k":64,
         "N":6,
         "h":8,
         "d_ff":2048,

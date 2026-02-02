@@ -3,22 +3,22 @@ import os
 import torchmetrics
 from dataset.Dataset import causal_mask
 
-def greedy_decode(model, source, source_mask, tokenizer_tgt, max_len, device):
+def greedy_decode(model, source, source_mask, tokenizer_tgt, tgt_Seq_len, device):
     sos_idx = tokenizer_tgt.token_to_id("[SOS]")
     eos_idx = tokenizer_tgt.token_to_id("[EOS]")
     encoder_output = model.encode(source, source_mask)
     decoder_input = torch.tensor([[sos_idx]], device=device)
-    while decoder_input.size(1) < max_len:
+    while decoder_input.size(1) < tgt_Seq_len:
         decoder_mask = causal_mask(decoder_input.size(1)).to(device)
         out = model.decode(encoder_output,source_mask,decoder_input,decoder_mask)
         prob = model.project(out[:, -1])
-        next_word = prob.argmax(dim=1).item()
+        next_word = prob.argmax(prob,dim=1).item()
         decoder_input = torch.cat([decoder_input, torch.tensor([[next_word]], device=device)],dim=1)
         if next_word == eos_idx:
             break
     return decoder_input.squeeze(0)
 
-def run_validation(model,validation_ds,tokenizer_tgt,max_len,device,print_msg,global_step,writer,num_examples=2,):
+def run_validation(model,validation_ds,tokenizer_tgt,tgt_seq_len,device,print_msg,global_step,writer,num_examples=2):
     model.eval()
     predicted, expected = [], []
     try:
@@ -31,7 +31,7 @@ def run_validation(model,validation_ds,tokenizer_tgt,max_len,device,print_msg,gl
             encoder_input = batch["encoder_input"].to(device)
             encoder_mask = batch["encoder_mask"].to(device)
             assert encoder_input.size(0) == 1, "Validation batch size must be 1"
-            model_out = greedy_decode(model,encoder_input,encoder_mask,tokenizer_tgt,max_len,device,)
+            model_out = greedy_decode(model,encoder_input,encoder_mask,tokenizer_tgt,tgt_seq_len,device)
             src_text = batch["src_text"][0]
             tgt_text = batch["tgt_text"][0]
             pred_text = tokenizer_tgt.decode(model_out.cpu().numpy())
